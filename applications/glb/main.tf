@@ -1,8 +1,8 @@
 module "vpc" {
-  source       = "../terraform-modules/google/vpc"
-  network_name = "${var.network_name}"
-  auto_subnet  = "${var.auto_subnet}"
-  subnets      = "${var.subnets}"
+  source      = "../terraform-modules/google/vpc"
+  name        = "${var.name}"
+  auto_subnet = "${var.auto_subnet}"
+  subnets     = "${var.subnets}"
 }
 
 provider "google" {

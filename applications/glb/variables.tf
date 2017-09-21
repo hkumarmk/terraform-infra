@@ -10,9 +10,9 @@ variable "credentials" {
   description = "Google service account credentials"
 }
 
-variable "network_name" {
-  description = "Network name"
-  default     = "glb-net"
+variable "name" {
+  description = "VPC name"
+  default     = "glb-vpc"
 }
 
 variable "auto_subnet" {
