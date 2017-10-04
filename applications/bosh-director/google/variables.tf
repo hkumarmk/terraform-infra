@@ -1,4 +1,4 @@
-variable "sg_rules" {
+variable "firewall_rules" {
   type = "list"
   default = [
     {
@@ -21,18 +21,6 @@ variable "sg_rules" {
   ]
 }
 
-variable "subnets" {
-  type = "list"
-}
-
-variable "auto_subnet" {
-  default = "false"
-}
-
-variable "vpc_name" {
-  default = "bosh-network"
-}
-
 variable "project" {
   default = "mcgcpcloud"
 }
@@ -40,3 +28,11 @@ variable "project" {
 variable "region" {}
 
 variable "google_key_file" {}
+
+variable "tf_base_networking_state_path" {
+  description = "base_networking terraform state path"
+}
+
+variable "tf_consul_address" {
+  description = "consul address that keep terraform states"
+}

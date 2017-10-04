@@ -1,15 +1,3 @@
-output "vpc_id" {
-  value = "${module.vpc.vpc_id}"
-}
-
-output "vpc_link" {
-  value = "${module.vpc.vpc_link}"
-}
-
-output "subnets" {
-  value = "${module.vpc.subnets}"
-}
-
-output "subnet_cidr" {
-  value = "${module.vpc.subnet_cidr}"
+output "bosh_instance_group_id" {
+  value = "${google_compute_instance_group.bosh.id}"
 }

@@ -1,15 +1,23 @@
+#
+# This code require "gcloud" binary installed on local machine
+
+terraform {
+  backend "consul" {}
+}
+
 provider "google" {
   project     = "${var.project}"
   region      = "${var.region}"
   credentials = "${file(var.google_key_file)}"
 }
 
-module "vpc" {
-  source      = "../../../terraform-modules/google/vpc"
-  name        = "${var.name}"
-  auto_subnet = "${var.auto_subnet}"
-  subnets     = "${var.subnets}"
-  sg_rules    = "${var.sg_rules}"
+# Read data from base_networking
+data "terraform_remote_state" "base_networking" {
+  backend = "consul"
+  config = {
+    address = "${var.tf_consul_address}"
+    path = "${var.tf_base_networking_state_path}"
+  }
 }
 
 # Getting compute zones
@@ -22,7 +30,7 @@ resource "google_compute_instance_group" "glb" {
   name = "glb"
   zone = "${data.google_compute_zones.available.names[0]}"
   description = "GLB instance group"
-  network = "${module.vpc.vpc_link}"
+  network = "${data.terraform_remote_state.base_networking.vpc_link}"
   named_port {
     name = "https"
     port = 443
@@ -67,7 +75,7 @@ Provision target tcp proxy and add forward rules to it using local-exec provisio
 resource "null_resource" "provision-tcp-proxy" {
   # Trigger this resource if any changes in global_address
   triggers {
-    global_address = "${google_compute_global_address.glb.id}"
+    global_address = "${google_compute_global_address.glb-address.id}"
   }
 
   provisioner "local-exec" {
@@ -84,7 +92,7 @@ if [ $(gcloud compute target-tcp-proxies  list --quiet --filter='service:${googl
   gcloud compute target-tcp-proxies create glb-target-proxy --backend-service glb-backend --proxy-header NONE;
 fi
 if [ $(gcloud beta compute forwarding-rules list --filter='target:glb-target-proxy' | wc -l) -eq 0 ]; then
-  gcloud beta compute forwarding-rules create glb-forwarding-rule --global --target-tcp-proxy glb-target-proxy --address ${google_compute_global_address.glb.address} --ports 443
+  gcloud beta compute forwarding-rules create glb-forwarding-rule --global --target-tcp-proxy glb-target-proxy --address ${google_compute_global_address.glb-address.address} --ports 443
 fi
 SCRIPT
   }

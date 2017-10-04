@@ -74,3 +74,11 @@ variable "google_key_file" {
   description = "Google key file"
   default = "tests/test_creds.json"
 }
+
+variable "tf_base_networking_state_path" {
+  description = "base_networking terraform state path"
+}
+
+variable "tf_consul_address" {
+  description = "consul address that keep terraform states"
+}
