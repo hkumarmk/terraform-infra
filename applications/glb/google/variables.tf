@@ -72,7 +72,6 @@ variable "backend_timeout" {
 
 variable "google_key_file" {
   description = "Google key file"
-  default = "tests/test_creds.json"
 }
 
 variable "tf_base_networking_state_path" {

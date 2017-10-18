@@ -1,5 +1,5 @@
 region = "us-central1"
-google_key_file = "tests/test_creds.json"
+google_key_file = "../../google_creds.json"
 subnets = [
   {
     name = "vpc-subnet-1"

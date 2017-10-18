@@ -8,7 +8,6 @@ terraform {
 provider "google" {
   project     = "${var.project}"
   region      = "${var.region}"
-  credentials = "${file(var.google_key_file)}"
 }
 
 # Read data from base_networking

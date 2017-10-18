@@ -1,4 +1,5 @@
 region = "us-central1"
-google_key_file = "tests/test_creds.json"
+google_key_file = "~/.creds/google_creds_bosh.json"
 tf_consul_address = "104.198.165.71:8500"
 tf_base_networking_state_path = "tfstates/google/us-central1/base_networking"
+zone = "us-central1-a"
