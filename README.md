@@ -1,12 +1,10 @@
-# terraform-mcinfra
-
-A repo to host mastercard specific terraform code. Terraform code in this repo
-depend on various common modules found in modules directory or public terraform modules.
+# terraform-infra
+Terraform code in this repo depend on various common modules found in modules directory or public terraform modules.
 
 * modules/: This directory contain reuseable terraform modules. The effort is to provide
   a common terraform terminology to deploy stuffs in different kind of cloud environments 
   by trying to abstract the differences as much as possible.
-* applications/: This directory contain terraform code to deploy mc application
+* applications/: This directory contain terraform code to deploy application
   specific infrastructure. The code here should apply code from modules and
   should expose all the configurations as variables.
 * environments/: This directory contain two set of files for
@@ -26,11 +24,11 @@ For example, run below set of commands to setup basic networking infrastructure 
 ```
 # Initialize terraform code - initialize backend, cache any modules used etc
 
-$ cd terraform-mcinfra/applications/base-networking/google/
+$ cd terraform-infra/applications/base-networking/google/
 
 $ terraform init -backend-config=../../../environments/base_networking/google-us-central1-prod/backend-config.tfvars
 Downloading modules...
-Get: file:///home/harish/code/terraform-mcinfra/modules/google/vpc
+Get: file:///home/harish/code/terraform-infra/modules/google/vpc
 
 Initializing the backend...
 Acquiring state lock. This may take a few moments...

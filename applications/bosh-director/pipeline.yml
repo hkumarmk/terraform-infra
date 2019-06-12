@@ -1,0 +1,46 @@
+name: tf-bosh
+resources:
+- name: terraform-modules
+  type: git
+  source:
+    uri: https://github.com/hkumarmk/terraform-modules.git
+    branch: master
+- name: terraform-infra
+  type: git
+  source:
+    uri: https://github.com/hkumarmk/terraform-apps.git
+    branch: master
+jobs:
+- name: terraform-deploy
+  plan:
+    - get: terraform-infra
+      trigger: true
+    - get: terraform-modules
+      trigger: true
+    - task: deploy-cloud-infra
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: hashicorp/terraform
+        inputs:
+        - name: terraform-infra
+        - name: terraform-modules
+        run:
+          path: sh
+          args:
+          - -c
+          - |
+            set -e
+            ls -l
+            cd terraform-infra/applications/bosh-director/google
+            export TF_VAR_google_key_file="creds.json"
+            cat > creds.json <<EOF
+            ((google_creds))
+            EOF
+            ls -l ../../../../terraform-modules
+            terraform get
+            terraform init
+            terraform plan -var-file ../../../environments/bosh-director/((cloud-provider))-((region))-((deployment)).tfvars
+            terraform destroy -var-file ../../../environments/bosh-director/((cloud-provider))-((region))-((deployment)).tfvars
